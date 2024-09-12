@@ -110,7 +110,23 @@ def patchMysqlCluster(name, body):
                                               version="v1beta1",plural="mysqlclusters", 
                                               name=name, body=body)
 
+def labelPod(name, label):
+    api_instance = ClientSingleton()
+    #print(label)
+    return api_instance.patch_namespaced_pod(name=name, namespace='default',
+                                              body={'metadata':{'labels':label}})
+    
 def changeReplica(num):
     mysql = yaml.safe_load(mysqlyaml)
     mysql['spec']['replicas'] = num
     return patchMysqlCluster('sample', mysql)
+
+
+def rebuildPod(name:str, fromname :str)-> bool:
+    try:
+        label = {"rebuild": fromname}
+        assert labelPod(name, label)
+        waitingMysqlClusterReady('sample')
+    except Exception as e:
+        print(e)
+        assert False

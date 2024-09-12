@@ -1,18 +1,16 @@
+import pytest
 from k8stest import prepare, final
 from k8stest.mysql import changeReplica
 
 
-class TestBase:
-    def setup_module(module):
+class TestReplicas:
+    def setup_module(self, module):
+        print("setup module")
         prepare()
-
-
-    def teardown_module(module):
+    def teardown_module(self, module):
+        print("teardown module")
         final()
-
-
-class TestReplicas(TestBase):
-    def test_Replicas4(module):
+    def test_Replicas4(self):
 
         try:
             changeReplica(4)
@@ -22,7 +20,7 @@ class TestReplicas(TestBase):
         assert False
 
 
-    def test_Replicas0(module):
+    def test_Replicas0(self):
 
         try:
             changeReplica(0)
@@ -32,7 +30,7 @@ class TestReplicas(TestBase):
             return
         assert True
     
-    def test_Replicas2(module):
+    def test_Replicas2(self):
 
         try:
             changeReplica(2)
@@ -50,18 +48,19 @@ class TestReplicas(TestBase):
             return
         assert True
 
-    def test_Replicas5(module):
+
+    def test_Replicas1(self):
         prepare()
         try:
-            changeReplica(5)
+            changeReplica(1)
         except Exception as e:
             assert False
             return
         assert True
-    def test_Replicas1(module):
+    def test_Replicas5(self):
         prepare()
         try:
-            changeReplica(1)
+            changeReplica(5)
         except Exception as e:
             assert False
             return
